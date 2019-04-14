@@ -302,8 +302,54 @@ C语言使用的这种简单的字符串表示方式，并不能满足 Redis 对
 #### 兼容部分C语言字符串函数
 
 - redis兼容c语言对于字符串末尾采用\0进行处理，这样使得其可以复用部分c语言字符串函数的代码，实现代码的精简性。
-### 1.3 SDS API
+
+#### 总结
+<div align="center"> <img src="../pics//2019-04-14_083005.png" width="400"/> </div><br>
+
 ## 2.链表
+### 链表节点的结构
+
+```c
+typedef struct listNode{
+    //前置节点
+    struct listNode *prev;
+    //后置节点
+    struct listNode *next;
+    //节点的值
+    void *value;
+}listNode;
+
+```
+<div align="center"> <img src="../pics//2019-04-14_083941.png" width="400"/> </div><br>
+
+### 持有链表节点的结构
+
+```c
+typedef strcut list{
+    //表头节点
+    listNode *head;
+    //表尾节点
+    listNode *tail;
+    //链表所包含的节点数量
+    unsigned long len;
+    //节点值复制函数(dup函数用于复制链表节点所保存的值)
+    void *(*dup) (void *ptr);
+    //节点值释放值（free函数用于释放链表节点所保存的值）
+    void (*free)(void *ptr);
+    //节点值对比函数（match函数用于对比链表节点所保存的值和另一个输入值是否相等）
+    int (*match)(void *ptr,void *key);
+}list;
+```
+<div align="center"> <img src="../pics//2019-04-14_084246.png" width="400"/> </div><br>
+
+### redis链表特性
+redis自己实现了双端链表
+
+- 双端：获取某前置/后置节点 O(1)
+- 无环：表头prev、表尾next 都指向null，访问时以 null 为终点
+- 带表头、表尾指针：list 结构中的 head 、tail，访问头尾 O(1)
+- 带链表长度：获取节点数量 O（1）
+- 多态：void* 指针保存节点值，通过 dup、free、match 为节点设置类型特定函数，可保存不同类型的值
 ## 3.字典
 ## 4.跳跃表
 ## 5.整数集合
