@@ -405,7 +405,9 @@ typedef struct dictEntry {
 
 图示：
 <div align="center"> <img src="../pics//2019-04-15_085552.png" width=""/> </div><br>
+
 #### 3.1.3 字典
+
 结构定义：
 
 ```c
