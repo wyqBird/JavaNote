@@ -407,6 +407,7 @@ typedef struct dictEntry {
 <div align="center"> <img src="../pics//2019-04-15_085552.png" width=""/> </div><br>
 #### 3.1.3 字典
 结构定义：
+
 ```c
 
 typedef struct dict {
@@ -426,7 +427,9 @@ typedef struct dict {
     // 目前正在运行的安全迭代器的数量
     int iterators; /* number of iterators currently running */
 } dict;
+```
 
+```c
 typedef struct dictType {
 
     // 计算哈希值的函数
@@ -449,6 +452,7 @@ typedef struct dictType {
 } dictType;
 
 ```
+
 一般情况下，字典只使用 ht[0] 哈希表，ht[1] 哈希表只会在对 ht[0] 哈希表进行 rehash 时使用。
 
 示例：普通状态下的字典
