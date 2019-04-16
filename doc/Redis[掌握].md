@@ -408,6 +408,7 @@ typedef struct dictEntry {
 #### 3.1.3 字典
 结构定义：
 ```c
+
 typedef struct dict {
     // 类型特定函数
     dictType *type;
