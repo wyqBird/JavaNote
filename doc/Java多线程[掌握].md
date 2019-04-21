@@ -149,9 +149,64 @@ Java 线程优先级特性：
 
 ## 1 synchronized 同步方法
 
+- “非线程安全”问题存在于“实例变量”中，若是方法内部的私有变量，则不存在“非线程安全”问题，这是方法内部的变量是私有的特性造成的。
+- synchronized 取得的锁都是对象锁。当一个线程执行的代码出现异常时，其所持有的锁会自动释放。
+- synchronized 可重入：当一个线程得到一个对象的锁后，再次请求此对象锁时是可以再次得到该对象的锁的，如果不可重入的话，会造成死锁。
+- 可冲入锁也支持在父子类继承的环境中：当存在父子类继承关系时，子类是完全可以通过“可重入锁”调用父类的同步方法。
+- 同步不可用继承：子类无法继承父类的同步方法。
+
 ## 2 synchronized 同步代码块
 
-## 3 volatile
+synchronized 同步方法在某些情况下因锁住的资源较多，耗时较长，可改用 synchronized 同步代码块，实现功能的同时提高效率。
+
+- 当一个线程访问某个对象的一个 synchronized 同步代码块时，另一个线程仍可以访问该对象中的非 synchronized(this) 同步代码块。不在同步代码块中就是异步，在同步代码块中就是同步。
+
+- 当一个线程访问对象的一个 synchronized(this) 同步代码块时，其他线程对同一个对象中所有其他 synchronized(this) 同步代码块的访问将被阻塞，因为 synchronized 使用的“对象监视器”是同一个。
+
+和 synchronized 方法一样，synchronized(this) 代码块也是锁定当前对象的。
+
+- 多个线程调用同一个对象中的不同名称的 synchronized 同步方法或 synchronized(this) 同步代码块时，是按顺序进行，同步阻塞的。
+
+- synchronized 同步方法：对其他 synchronized 同步方法或 synchronized(this) 同步代码块调用呈阻塞状态；同一时间只有一个线程可以执行 synchronized 同步方法中的代码。
+
+- synchronized(this) 同步代码块：对其他 synchronized 同步方法或 synchronized(this) 同步代码块呈阻塞状态；同一时间只有一个线程可以执行 synchronized(this) 同步代码块中的代码。
+
+将任意对象作为对象监视器：synchronized(非 this 对象)
+
+- 在多个线程持有“对象监视器”为同一个对象的前提下，同一时间只有一个线程可以执行 synchronized(非 this 对象 x) 同步代码块中的代码。
+
+- 当持有“对象监视器”为同一个对象的前提下，同一时间只有一个线程可以执行 synchronized(非 this 对象 x) 同步代码块中的代码。
+
+锁非 this 对象的优点：若在一个类中有很多个 synchronized 方法，这是虽然能实现同步，但会收到阻塞，所以影响效率；但若使用同步代码块锁非 this 对象，则 synchronized(非 this) 代码块中的程序与同步方法是异步的，不与其他锁 this 同步方法争抢 this 锁，可大大提高效率。
+
+synchronized(非 this 对象 x) 总结：
+
+- 当多个线程同时执行 synchronized(x){} 同步代码块时呈同步效果；
+- 当其他线程执行 x 对象中 synchronized 同步方法时呈同步效果；
+- 当其他线程执行 x 对象方法里面的 synchronized(this) 代码块时也呈现同步效果。
+- 若其他线程调用不加 synchronized 关键字的方法时，还是异步调用。
+
+## 3 静态同步 synchronized 方法与 synchronized(class) 代码块
+
+synchronized 用在 static 静态方法上，是对当前的 *.java 文件对应的 Class 类进行加锁，而 synchronized 关键字加到非静态方法上是给对象加锁。Class锁可以对类的所有对象实例起作用。
+
+synchronized(class)代码块的作用其实和 synchronized static 方法的作用一样。
+
+在将任何数据类型作为同步锁时，需要注意的是，是否有多个线程同时持有锁对象，若同时持有相同锁对象，则这些线程之间是同步的；若分别获得锁对象，这些线程之间是异步的。
+
+注意String的常量池特性（缓存），所导致的例外。在大多数情况下，同步 synchronized 代码块都不使用 String 作为锁对象。
+
+## 4 volatile
+
+volatile：强制从公共堆栈中取得变量的值，而不是从线程私有数据栈中取得变量的值。
+
+volatile和synchronized：
+
+- volatile是线程同步的轻量级实现，性能比synchronized稍好；
+- volatile只能修饰变量，synchronized可修饰方法、代码块；
+- 多线程访问 volatile 不发生阻塞，而 synchronized 会出现阻塞；
+- volatile只能保证数据可见性，synchronized 可保证原子性和可见性，它会将私有内存和公共内存做数据同步；
+- volatile解决的是变量在多个线程之间的可见性，synchronized解决的是多线程之间访问资源的同步性。
 
 # 三、线程间通信
 
