@@ -260,7 +260,25 @@ notifyAll()：
 
 ## 1 ReentrantLock 类
 
+synchronized 与 wait()、notify()/notifyAll() 结合可实现 等待/通知 模型，ReentrantLock借助 Condition 对象也可实现该模型。
+
+使用 notify（）/notifyAll（）方法进行通知时，被通知的线程是由 JVM 随机选择的。ReentrantLock 结合 Condition 类可实现“选择性通知”、多路通知等功能。
+
+默认情况下 ReentrantLock 是非公平锁。
+公平锁：按照线程加锁的顺序来分配锁，即FIFO；
+非公平锁：抢占机制，随机获得锁。
+
 ## 2 ReentrantReadWriteLock 类
+
+ReentrantLock 是完全互斥排他的，即同一个时间只有一个线程在执行 ReentrantLock.lock() 方法后面的任务。虽然保证了实例变量的线程安全性，但效率低下。
+
+ReentrantLockReadWriteLock 类，在某些不需要操作实例变量的方法中，完全可以使用它来替代 ReentrantLock 提升运行速度。
+
+ReentrantReadWriteLock，读写锁，表示有两个锁，一个读锁/共享锁，一个写锁/排他锁。
+
+读锁之间不互斥，读锁和写锁互斥，写锁和写锁互斥。
+
+多个线程可同时进行读取操作，但同一时刻只允许一个线程进行写入。
 
 # 五、定时器 Timer
 
