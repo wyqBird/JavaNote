@@ -1,6 +1,6 @@
 # 一、多线程技能
 
-## 1 多线程知识点
+## 1. 多线程知识点
 
 四种实现方法
 
@@ -19,7 +19,7 @@ Thread 中的 start 只是通知“线程规划器”此线程准备就绪，等
 
 非线程安全主要指多线程对同一个对象中同一个实例变量进行操作时会出现值被更改、值不同步的情况，进而影响程序的执行流程。
 
-## 2 常用方法
+## 2. 常用方法
 
 - currentThread()：返回代码段正在被哪个线程调用的信息；
 - isAlive()：判断当前线程是否处于活动状态；
@@ -86,7 +86,7 @@ public Thread(Runnable target) {
 - 此时Thread.currentThread()是Thread的引用newThread, 而this依旧是MyThread的引用，所以是不一样的，打印的内容也不一样
 
 
-## 3 停止线程
+## 3. 停止线程
 
 - Thread.stop()：可停止一个线程，但不安全，已弃用；
 - Thread.interrupt()：不会终止一个正在执行的线程，需加入一个判断才能完成线程的停止。
@@ -112,7 +112,7 @@ public Thread(Runnable target) {
 - 但这种方法，使得 return 后，异常不会抛出，线程停止的事件无法传播。
 - 所以建议使用 “抛异常”的方法来实现线程的停止，因为在 catch 块中还可以将异常上抛，使线程停止的事件得以传播。
 
-## 4 暂停线程
+## 4. 暂停线程
 
 suspend()：暂停线程
 
@@ -147,15 +147,15 @@ Java 线程优先级特性：
 
 # 二、对象及变量的并发访问
 
-## 1 synchronized 同步方法
+## 1. synchronized 同步方法
 
 - “非线程安全”问题存在于“实例变量”中，若是方法内部的私有变量，则不存在“非线程安全”问题，这是方法内部的变量是私有的特性造成的。
 - synchronized 取得的锁都是对象锁。当一个线程执行的代码出现异常时，其所持有的锁会自动释放。
 - synchronized 可重入：当一个线程得到一个对象的锁后，再次请求此对象锁时是可以再次得到该对象的锁的，如果不可重入的话，会造成死锁。
-- 可冲入锁也支持在父子类继承的环境中：当存在父子类继承关系时，子类是完全可以通过“可重入锁”调用父类的同步方法。
-- 同步不可用继承：子类无法继承父类的同步方法。
+- 可重入锁也支持在父子类继承的环境中：当存在父子类继承关系时，子类是完全可以通过“可重入锁”调用父类的同步方法。
+- 同步不可用于继承：子类无法继承父类的同步方法。
 
-## 2 synchronized 同步代码块
+## 2. synchronized 同步代码块
 
 synchronized 同步方法在某些情况下因锁住的资源较多，耗时较长，可改用 synchronized 同步代码块，实现功能的同时提高效率。
 
@@ -177,7 +177,7 @@ synchronized 同步方法在某些情况下因锁住的资源较多，耗时较�
 
 - 当持有“对象监视器”为同一个对象的前提下，同一时间只有一个线程可以执行 synchronized(非 this 对象 x) 同步代码块中的代码。
 
-锁非 this 对象的优点：若在一个类中有很多个 synchronized 方法，这是虽然能实现同步，但会收到阻塞，所以影响效率；但若使用同步代码块锁非 this 对象，则 synchronized(非 this) 代码块中的程序与同步方法是异步的，不与其他锁 this 同步方法争抢 this 锁，可大大提高效率。
+锁非 this 对象的优点：若在一个类中有很多个 synchronized 方法，这虽然能实现同步，但会受到阻塞，所以影响效率；但若使用同步代码块锁非 this 对象，则 synchronized(非 this) 代码块中的程序与同步方法是异步的，不与其他锁 this 同步方法争抢 this 锁，可大大提高效率。
 
 synchronized(非 this 对象 x) 总结：
 
@@ -186,7 +186,7 @@ synchronized(非 this 对象 x) 总结：
 - 当其他线程执行 x 对象方法里面的 synchronized(this) 代码块时也呈现同步效果。
 - 若其他线程调用不加 synchronized 关键字的方法时，还是异步调用。
 
-## 3 静态同步 synchronized 方法与 synchronized(class) 代码块
+## 3. 静态同步 synchronized 方法与 synchronized(class) 代码块
 
 synchronized 用在 static 静态方法上，是对当前的 *.java 文件对应的 Class 类进行加锁，而 synchronized 关键字加到非静态方法上是给对象加锁。Class锁可以对类的所有对象实例起作用。
 
@@ -196,7 +196,7 @@ synchronized(class)代码块的作用其实和 synchronized static 方法的作�
 
 注意String的常量池特性（缓存），所导致的例外。在大多数情况下，同步 synchronized 代码块都不使用 String 作为锁对象。
 
-## 4 volatile
+## 4. volatile
 
 volatile：强制从公共堆栈中取得变量的值，而不是从线程私有数据栈中取得变量的值。
 
@@ -210,7 +210,7 @@ volatile和synchronized：
 
 # 三、线程间通信
 
-## 1 等待/通知机制
+## 1. 等待/通知机制
 
 wait()：
 
@@ -238,7 +238,7 @@ notifyAll()：
 
 当 wait() 方法被执行后，锁被自动释放，但执行完 notify 方法后，锁不自动释放。必须等到 notify 所在的同步代码块执行完毕后，锁才释放。
 
-## 2 join方法
+## 2. join方法
 
 - 等待线程对象销毁
 - 使所属的线程对象 x 正常执行 run() 方法中的任务，而使当前线程 z 进行无限期的阻塞，等待线程 x 销毁后再继续执行线程 z 后面的代码
@@ -247,18 +247,18 @@ notifyAll()：
 - join 过程中，若当前线程对象被中断，则当前线程出现异常
 - join 和 sleep 区别：join 在内部使用 wait 方法实现，所以具有释放锁的特点；Thread.sleep()方法不释放锁。
 
-## 3 ThreadLocal类
+## 3. ThreadLocal类
 
 - ThreadLocal 解决的是变量在不同线程间的隔离性，也就是不同线程拥有自己的值，不同线程中的值是可以放入 ThreadLocal 类中进行保存的。
 
-## 4 InheritableThreadLocal类
+## 4. InheritableThreadLocal类
 
 - 使用 InheritableThreadLocal 可以在子线程中取得父线程继承下来的值
 - 若子线程在取得值得同时，主线程将 InheritableThreadLocal 中的值进行修改，那么子线程取到的值还是旧值
 
 # 四、Lock
 
-## 1 ReentrantLock 类
+## 1. ReentrantLock 类
 
 synchronized 与 wait()、notify()/notifyAll() 结合可实现 等待/通知 模型，ReentrantLock借助 Condition 对象也可实现该模型。
 
@@ -268,7 +268,7 @@ synchronized 与 wait()、notify()/notifyAll() 结合可实现 等待/通知 模
 公平锁：按照线程加锁的顺序来分配锁，即FIFO；
 非公平锁：抢占机制，随机获得锁。
 
-## 2 ReentrantReadWriteLock 类
+## 2. ReentrantReadWriteLock 类
 
 ReentrantLock 是完全互斥排他的，即同一个时间只有一个线程在执行 ReentrantLock.lock() 方法后面的任务。虽然保证了实例变量的线程安全性，但效率低下。
 
