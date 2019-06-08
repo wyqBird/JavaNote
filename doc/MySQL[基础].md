@@ -43,7 +43,7 @@ B+ Tree 是基于 B Tree 和叶子节点顺序访问指针进行实现，它具�
 
 在 B+ Tree 中，一个节点中的 key 从左到右非递减排列，如果某个指针的左右相邻 key 分别是 key<sub>i</sub> 和 key<sub>i+1</sub>，且不为 null，则该指针指向节点的所有 key 大于等于 key<sub>i</sub> 且小于等于 key<sub>i+1</sub>。
 
-<div align="center"> <img src="../pics//061c88c1-572f-424f-b580-9cbce903a3fe.png"/> </div><br>
+<div align="center"> <img src="..//pics//061c88c1-572f-424f-b580-9cbce903a3fe.png"/> </div><br>
 
 ### 2. 操作
 
